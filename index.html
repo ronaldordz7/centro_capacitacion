@@ -2,964 +2,169 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Centro de Capacitación Ultra-Automatizado - Demo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Propuestas | Centro de Capacitación</title>
+
   <style>
-    :root {
-      --bg-main: #020617;
-      --bg-elevated: #020617;
-      --bg-panel: #020617;
-      --border-soft: #1f2937;
-      --accent: #f97316;
-      --accent-soft: #fb923c;
-      --text-main: #e5e7eb;
-      --text-muted: #9ca3af;
-      --success: #4ade80;
-      --danger: #f97373;
-      --warning: #fbbf24;
-    }
-    * {
-      box-sizing: border-box;
-    }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0b1120;
-      color: var(--text-main);
       margin: 0;
-      min-height: 100vh;
+      font-family: "Inter", sans-serif;
+      background: linear-gradient(135deg, #141414, #1f1f1f);
+      color: #fff;
       display: flex;
       flex-direction: column;
-    }
-    header {
-      border-bottom: 1px solid var(--border-soft);
-      padding: 12px 24px;
-      display: flex;
-      justify-content: space-between;
       align-items: center;
-      background: radial-gradient(circle at top left, #111827, #020617 45%);
+      padding: 40px 20px;
     }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-badge {
-      width: 30px;
-      height: 30px;
-      border-radius: 999px;
-      background: radial-gradient(circle, #fb923c, #c2410c);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: #111827;
-    }
-    .logo-title {
-      font-weight: 600;
-      font-size: 1rem;
-    }
-    .logo-sub {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-    .mode-switch {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .pill-switch {
-      background: #020617;
-      border-radius: 999px;
-      padding: 3px;
-      display: flex;
-      border: 1px solid var(--border-soft);
-    }
-    .pill-btn {
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-    .pill-btn.active {
-      background: linear-gradient(to right, var(--accent), var(--accent-soft));
-      color: #111827;
-      font-weight: 600;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      gap: 18px;
-      padding: 16px 18px 20px;
-    }
-    .column {
-      flex: 1;
-    }
-    .column-wide {
-      flex: 1.3;
-    }
-    .card {
-      background: var(--bg-panel);
-      border-radius: 14px;
-      border: 1px solid var(--border-soft);
-      padding: 14px 16px;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.45);
-    }
-    h1, h2, h3, h4 {
-      margin: 0;
-    }
+
     h1 {
-      font-size: 1.4rem;
-      color: var(--accent);
-    }
-    h2 {
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-    }
-    .muted {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-    label {
-      display: block;
-      font-size: 0.8rem;
-      margin-bottom: 4px;
-      color: #cbd5f5;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      background: #020617;
-      color: var(--text-main);
-      font-size: 0.9rem;
-      margin: 0;
-    }
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-    .field {
+      font-size: 2.4rem;
       margin-bottom: 10px;
+      text-align: center;
     }
-    button {
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: none;
-      background: linear-gradient(to right, var(--accent), var(--accent-soft));
-      color: #111827;
-      font-weight: 600;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+
+    p {
+      color: #bbbbbb;
+      text-align: center;
+      max-width: 600px;
+      margin-bottom: 30px;
     }
-    button.secondary {
-      background: #020617;
-      color: var(--text-main);
-      border: 1px solid var(--border-soft);
-      font-weight: 500;
-    }
-    button.small {
-      font-size: 0.8rem;
-      padding: 6px 10px;
-    }
-    button:disabled {
-      opacity: 0.6;
-      cursor: wait;
-    }
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #0f172a;
-      font-size: 0.75rem;
-      margin-right: 4px;
-      margin-bottom: 4px;
-      border: 1px solid var(--border-soft);
-    }
-    .badge-success {
-      background: rgba(34,197,94,0.1);
-      border-color: rgba(34,197,94,0.45);
-      color: #bbf7d0;
-    }
-    .badge-warning {
-      background: rgba(250,204,21,0.08);
-      border-color: rgba(250,204,21,0.5);
-      color: #facc15;
-    }
-    .badge-danger {
-      background: rgba(248,113,113,0.08);
-      border-color: rgba(248,113,113,0.5);
-      color: #fecaca;
-    }
-    .loader {
-      font-size: 0.85rem;
-      color: var(--warning);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 6px;
-    }
-    .loader-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--warning);
-      animation: bounce 0.8s infinite alternate;
-    }
-    .loader-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .loader-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-    @keyframes bounce {
-      from { transform: translateY(0); opacity: 0.4; }
-      to { transform: translateY(-3px); opacity: 1; }
-    }
-    .error {
-      color: var(--danger);
-      font-size: 0.8rem;
-      margin-top: 6px;
-    }
-    .price {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--success);
-      margin-top: 6px;
-    }
-    .module {
-      border-radius: 10px;
-      border: 1px solid var(--border-soft);
-      padding: 9px;
-      margin-bottom: 8px;
-      background: #020617;
-    }
-    .module-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-      font-size: 0.92rem;
-    }
-    .module small {
-      color: var(--text-muted);
-      font-size: 0.78rem;
-    }
-    .tag {
-      display: inline-flex;
-      align-items: center;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: #111827;
-      font-size: 0.7rem;
-      margin-right: 4px;
-      margin-top: 3px;
-    }
-    .tag-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 999px;
-      background: var(--accent);
-      margin-right: 4px;
-    }
-    .divider {
-      margin: 10px 0;
-      border-top: 1px solid #111827;
-    }
-    /* Admin panel */
-    .table {
+
+    .box {
       width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-      margin-top: 6px;
+      max-width: 700px;
+      background: #1a1a1a;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s ease;
     }
-    .table th, .table td {
-      border-bottom: 1px solid #111827;
-      padding: 6px;
-      text-align: left;
-    }
-    .table th {
-      color: var(--text-muted);
-      font-weight: 500;
-      font-size: 0.78rem;
-    }
-    .table tr {
-      cursor: pointer;
-    }
-    .table tr:hover {
-      background: #020617;
-    }
-    .status-pill {
-      display: inline-flex;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-size: 0.7rem;
-      align-items: center;
-      gap: 3px;
-    }
-    .status-pill span.dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-    }
-    .status-pendiente {
-      background: rgba(148,163,184,0.15);
-      color: #e5e7eb;
-    }
-    .status-pendiente span.dot {
-      background: #9ca3af;
-    }
-    .status-propuesta {
-      background: rgba(250,204,21,0.1);
-      color: #facc15;
-    }
-    .status-propuesta span.dot {
-      background: #facc15;
-    }
-    .status-curso {
-      background: rgba(34,197,94,0.12);
-      color: #bbf7d0;
-    }
-    .status-curso span.dot {
-      background: #22c55e;
-    }
-    .chips-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 4px;
-    }
-    .pill {
-      padding: 3px 8px;
-      border-radius: 999px;
-      border: 1px solid #111827;
-      font-size: 0.7rem;
-      background: #020617;
-      color: var(--text-muted);
-    }
-    .kpi-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-    .kpi {
-      flex: 1;
-      min-width: 120px;
-      border-radius: 10px;
-      border: 1px solid #111827;
-      padding: 8px;
-      background: #020617;
-      font-size: 0.8rem;
-    }
-    .kpi-label {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-    }
-    .kpi-value {
+
+    textarea {
+      width: 100%;
+      height: 160px;
+      border-radius: 14px;
+      border: none;
+      padding: 18px;
       font-size: 1rem;
-      font-weight: 600;
-      margin-top: 3px;
+      background: #262626;
+      color: #fff;
+      resize: none;
     }
-    .link {
-      font-size: 0.8rem;
-      color: #93c5fd;
-      text-decoration: underline;
+
+    textarea:focus {
+      outline: 2px solid #6e9dff;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      background: #6e9dff;
+      border: none;
+      padding: 16px;
+      font-size: 1.1rem;
+      border-radius: 12px;
       cursor: pointer;
-      word-break: break-all;
+      font-weight: bold;
+      transition: 0.2s ease;
     }
-    /* Layout responsive */
-    @media (max-width: 960px) {
-      main {
-        flex-direction: column;
-      }
+
+    button:hover {
+      background: #8bb2ff;
+    }
+
+    .result {
+      margin-top: 35px;
+      padding: 25px;
+      background: #202020;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.2);
+      animation: slideUp 0.4s ease;
+      display: none;
+      white-space: pre-wrap;
+    }
+
+    .loading {
+      animation: pulse 1.2s infinite;
+      color: #8bb2ff;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.4; }
+      50% { opacity: 1; }
+      100% { opacity: 0.4; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">
-      <div class="logo-badge">IA</div>
-      <div>
-        <div class="logo-title">Centro de Capacitación Ultra-Automatizado</div>
-        <div class="logo-sub">Demo interactiva — Cliente & Administrador</div>
-      </div>
-    </div>
-    <div class="mode-switch">
-      <span class="muted">Modo vista:</span>
-      <div class="pill-switch">
-        <button class="pill-btn active" id="btnModoCliente">Cliente</button>
-        <button class="pill-btn" id="btnModoAdmin">Administrador</button>
-      </div>
-    </div>
-  </header>
 
-  <main>
-    <!-- MODO CLIENTE -->
-    <section id="modoCliente" style="display:flex; gap:18px; width:100%;">
-      <div class="column card">
-        <h1>Diseña tu curso en minutos</h1>
-        <p class="muted">
-          Cuéntale a la IA qué necesita tu equipo y generaremos un plan de capacitación completo
-          con habilidades, módulos, lecciones y una inversión estimada.
-        </p>
-        <div class="divider"></div>
-        <form id="formCliente">
-          <div class="field">
-            <label for="empresa">Nombre de la empresa</label>
-            <input id="empresa" name="empresa" placeholder="Ej. Finanzas Seguras SAC" required />
-          </div>
-          <div class="field">
-            <label for="email">Correo de contacto</label>
-            <input id="email" name="email" type="email" placeholder="ejemplo@empresa.com" required />
-          </div>
-          <div class="field">
-            <label for="equipo">Tipo de equipo</label>
-            <select id="equipo" name="equipo">
-              <option value="ventas">Ventas</option>
-              <option value="soporte">Soporte al cliente</option>
-              <option value="operaciones">Operaciones</option>
-              <option value="finanzas">Finanzas</option>
-              <option value="tecnologia">Tecnología</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="nivel">Nivel de profundidad</label>
-            <select id="nivel" name="nivel">
-              <option value="basico">Básico</option>
-              <option value="intermedio">Intermedio</option>
-              <option value="avanzado">Avanzado</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="personas">Nº de personas a capacitar</label>
-            <input id="personas" name="personas" type="number" min="1" value="10" />
-          </div>
-          <div class="field">
-            <label for="duracion">Duración objetivo del programa (en horas)</label>
-            <input id="duracion" name="duracion" type="number" min="1" value="8" />
-          </div>
-          <div class="field">
-            <label for="descripcion">Describe la necesidad de capacitación</label>
-            <textarea id="descripcion" name="descripcion"
-              placeholder="Ej: Necesitamos capacitar al equipo de ventas en manejo de objeciones, cierre de ventas y uso de CRM con foco en clientes corporativos."></textarea>
-          </div>
-          <button type="submit" id="btnGenerarCliente">
-            <span>Generar propuesta de curso</span>
-          </button>
-          <div id="loaderCliente" class="loader" style="display:none;">
-            <span class="loader-dot"></span>
-            <span class="loader-dot"></span>
-            <span class="loader-dot"></span>
-            <span>Analizando tu necesidad y diseñando el plan...</span>
-          </div>
-          <div id="errorCliente" class="error" style="display:none;"></div>
-        </form>
-      </div>
+  <h1>Generador Inteligente de Propuestas</h1>
+  <p>Describe la necesidad del cliente y generaremos automáticamente una propuesta completa en minutos.</p>
 
-      <div class="column-wide card" id="panelResultadoCliente">
-        <h2>Propuesta generada por la IA</h2>
-        <p class="muted" id="placeholderCliente">
-          Aquí verás el resumen del análisis del prompt, las habilidades detectadas, el plan de estudios y la
-          inversión estimada. También se mostrará un <b>ID de solicitud</b> que el administrador podrá usar
-          para gestionar la fabricación del curso.
-        </p>
-        <div id="contenidoCliente" style="display:none;"></div>
-      </div>
-    </section>
+  <div class="box">
+    <textarea id="promptInput" placeholder="Ejemplo: Necesito capacitar a mi equipo de soporte técnico para mejorar comunicación empática y documentación en Zendesk..."></textarea>
+    <button onclick="sendToN8N()">Generar Propuesta</button>
+  </div>
 
-    <!-- MODO ADMIN -->
-    <section id="modoAdmin" style="display:none; gap:18px; width:100%;">
-      <div class="column card">
-        <h2>Misión de Control — Administrador</h2>
-        <p class="muted">
-          Visualiza las solicitudes, estados del pipeline (prompt → propuesta → curso), y dispara la fabricación
-          del curso cuando sea necesario.
-        </p>
-        <div class="kpi-row">
-          <div class="kpi">
-            <div class="kpi-label">Solicitudes totales</div>
-            <div class="kpi-value" id="kpiTotal">–</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Con propuesta generada</div>
-            <div class="kpi-value" id="kpiPropuesta">–</div>
-          </div>
-          <div class="kpi">
-            <div class="kpi-label">Cursos generados</div>
-            <div class="kpi-value" id="kpiCurso">–</div>
-          </div>
-        </div>
-        <div class="divider"></div>
-        <div class="field">
-          <label for="filtroEstado">Filtrar por estado</label>
-          <select id="filtroEstado">
-            <option value="todos">Todos</option>
-            <option value="pendiente">Pendiente</option>
-            <option value="propuesta">Propuesta generada</option>
-            <option value="curso">Curso generado</option>
-          </select>
-        </div>
-        <button class="small" id="btnActualizarAdmin">Actualizar tablero</button>
-        <div id="loaderAdmin" class="loader" style="display:none;">
-          <span class="loader-dot"></span>
-          <span class="loader-dot"></span>
-          <span class="loader-dot"></span>
-          <span>Cargando solicitudes desde el orquestador...</span>
-        </div>
-        <div id="errorAdmin" class="error" style="display:none;"></div>
-
-        <table class="table" id="tablaSolicitudes">
-          <thead>
-          <tr>
-            <th>ID</th>
-            <th>Empresa</th>
-            <th>Equipo</th>
-            <th>Personas</th>
-            <th>Estado</th>
-            <th>Precio</th>
-          </tr>
-          </thead>
-          <tbody>
-          <!-- filas dinámicas -->
-          </tbody>
-        </table>
-        <p class="muted" style="margin-top:6px;">
-          Haz clic en una fila para ver el detalle completo de la solicitud, la propuesta y el enlace al curso.
-        </p>
-      </div>
-
-      <div class="column-wide card" id="panelDetalleAdmin">
-        <h2>Detalle de solicitud</h2>
-        <p class="muted" id="placeholderAdmin">
-          Selecciona una solicitud de la tabla para visualizar su resumen, habilidades, syllabus y, si ya fue
-          fabricado, el enlace al curso final.
-        </p>
-        <div id="detalleAdmin" style="display:none;"></div>
-      </div>
-    </section>
-  </main>
+  <div id="output" class="result"></div>
 
   <script>
-    // Toggle modos
-    const btnModoCliente = document.getElementById("btnModoCliente");
-    const btnModoAdmin = document.getElementById("btnModoAdmin");
-    const modoCliente = document.getElementById("modoCliente");
-    const modoAdmin = document.getElementById("modoAdmin");
+    async function sendToN8N() {
+      const text = document.getElementById("promptInput").value;
+      const output = document.getElementById("output");
 
-    btnModoCliente.addEventListener("click", () => {
-      btnModoCliente.classList.add("active");
-      btnModoAdmin.classList.remove("active");
-      modoCliente.style.display = "flex";
-      modoAdmin.style.display = "none";
-    });
+      if (text.trim() === "") {
+        output.style.display = "block";
+        output.innerHTML = "<b>Error:</b> Debes escribir una necesidad.";
+        return;
+      }
 
-    btnModoAdmin.addEventListener("click", () => {
-      btnModoAdmin.classList.add("active");
-      btnModoCliente.classList.remove("active");
-      modoCliente.style.display = "none";
-      modoAdmin.style.display = "flex";
-    });
-
-    // ---------- MODO CLIENTE ----------
-    const formCliente = document.getElementById("formCliente");
-    const loaderCliente = document.getElementById("loaderCliente");
-    const errorCliente = document.getElementById("errorCliente");
-    const btnGenerarCliente = document.getElementById("btnGenerarCliente");
-    const placeholderCliente = document.getElementById("placeholderCliente");
-    const contenidoCliente = document.getElementById("contenidoCliente");
-
-    formCliente.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      errorCliente.style.display = "none";
-      contenidoCliente.style.display = "none";
-      placeholderCliente.style.display = "block";
-      loaderCliente.style.display = "flex";
-      btnGenerarCliente.disabled = true;
-
-      const payload = {
-        empresa: document.getElementById("empresa").value,
-        email: document.getElementById("email").value,
-        equipo: document.getElementById("equipo").value,
-        nivel: document.getElementById("nivel").value,
-        personas: Number(document.getElementById("personas").value || 0),
-        duracion: Number(document.getElementById("duracion").value || 0),
-        descripcion: document.getElementById("descripcion").value
-      };
+      output.style.display = "block";
+      output.innerHTML = "<p class='loading'>⏳ Procesando tu propuesta en n8n...</p>";
 
       try {
-        const resp = await fetch("https://ronaldordz17.app.n8n.cloud/webhook-test/analyze-prompt", {
+        const response = await fetch("https://ronaldordz17.app.n8n.cloud/webhook/analyze-prompt", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            prompt: text,
+            timestamp: Date.now()
+          })
         });
 
-        if (!resp.ok) {
-          throw new Error("Error al comunicarse con n8n.");
+        if (!response.ok) {
+          throw new Error("Error en webhook");
         }
 
-        // Formato esperado desde n8n para la demo:
-        // {
-        //   id_solicitud: "ABC123",
-        //   resumen: "...",
-        //   habilidades_blandas: ["Comunicación", "Trabajo en equipo"],
-        //   habilidades_tecnicas: ["CRM", "Excel"],
-        //   syllabus: [
-        //     { modulo: "Título módulo", duracion: 2, lecciones: ["Lección 1", "Lección 2"] }
-        //   ],
-        //   precio: 120
-        // }
-        const data = await resp.json();
+        const data = await response.json();
 
-        placeholderCliente.style.display = "none";
-        contenidoCliente.style.display = "block";
-        contenidoCliente.innerHTML = "";
-
-        const idEl = document.createElement("p");
-        idEl.innerHTML = `<span class="muted">ID de solicitud:</span> <b>${data.id_solicitud || "-"}</b>`;
-        contenidoCliente.appendChild(idEl);
-
-        const resumenEl = document.createElement("p");
-        resumenEl.textContent = data.resumen || "Se generó una propuesta de curso personalizada.";
-        contenidoCliente.appendChild(resumenEl);
-
-        if (data.habilidades_blandas?.length || data.habilidades_tecnicas?.length) {
-          const habTitle = document.createElement("h3");
-          habTitle.textContent = "Habilidades detectadas";
-          contenidoCliente.appendChild(habTitle);
-
-          const habContainer = document.createElement("div");
-          (data.habilidades_blandas || []).forEach(h => {
-            const span = document.createElement("span");
-            span.className = "badge";
-            span.textContent = h;
-            habContainer.appendChild(span);
-          });
-          (data.habilidades_tecnicas || []).forEach(h => {
-            const span = document.createElement("span");
-            span.className = "badge";
-            span.textContent = h;
-            habContainer.appendChild(span);
-          });
-          contenidoCliente.appendChild(habContainer);
-        }
-
-        if (data.syllabus?.length) {
-          const sylTitle = document.createElement("h3");
-          sylTitle.style.marginTop = "10px";
-          sylTitle.textContent = "Plan de estudios propuesto";
-          contenidoCliente.appendChild(sylTitle);
-
-          data.syllabus.forEach((mod, idx) => {
-            const modDiv = document.createElement("div");
-            modDiv.className = "module";
-
-            const title = document.createElement("div");
-            title.className = "module-title";
-            title.textContent = `Módulo ${idx + 1}: ${mod.modulo || "Sin título"}`;
-            modDiv.appendChild(title);
-
-            const meta = document.createElement("small");
-            if (mod.duracion) {
-              meta.textContent = `Duración estimada: ${mod.duracion} horas`;
-              modDiv.appendChild(meta);
-            }
-
-            if (mod.lecciones?.length) {
-              const ul = document.createElement("ul");
-              mod.lecciones.forEach(lec => {
-                const li = document.createElement("li");
-                li.textContent = lec;
-                ul.appendChild(li);
-              });
-              modDiv.appendChild(ul);
-            }
-            contenidoCliente.appendChild(modDiv);
-          });
-        }
-
-        const precioDiv = document.createElement("div");
-        precioDiv.className = "price";
-        precioDiv.textContent = data.precio
-          ? `Inversión estimada: USD ${data.precio}`
-          : "Inversión estimada calculada automáticamente.";
-        contenidoCliente.appendChild(precioDiv);
-
-        const nota = document.createElement("p");
-        nota.className = "muted";
-        nota.innerHTML = `Comparte el <b>ID de solicitud</b> con el administrador para que pueda fabricar el curso completo
-                          y habilitarlo para tus colaboradores.`;
-        contenidoCliente.appendChild(nota);
+        output.innerHTML = `
+          <h2>📄 Propuesta Generada</h2>
+          ${data.propuesta ? data.propuesta : JSON.stringify(data, null, 2)}
+        `;
 
       } catch (err) {
-        console.error(err);
-        errorCliente.textContent = "Ocurrió un error generando la propuesta. Inténtalo nuevamente.";
-        errorCliente.style.display = "block";
-      } finally {
-        loaderCliente.style.display = "none";
-        btnGenerarCliente.disabled = false;
-      }
-    });
-
-    // ---------- MODO ADMIN ----------
-    const btnActualizarAdmin = document.getElementById("btnActualizarAdmin");
-    const loaderAdmin = document.getElementById("loaderAdmin");
-    const errorAdmin = document.getElementById("errorAdmin");
-    const tablaSolicitudesBody = document.querySelector("#tablaSolicitudes tbody");
-    const filtroEstado = document.getElementById("filtroEstado");
-    const placeholderAdmin = document.getElementById("placeholderAdmin");
-    const detalleAdmin = document.getElementById("detalleAdmin");
-    const kpiTotal = document.getElementById("kpiTotal");
-    const kpiPropuesta = document.getElementById("kpiPropuesta");
-    const kpiCurso = document.getElementById("kpiCurso");
-
-    let solicitudesCache = [];
-
-    function estadoBadge(estado) {
-      const span = document.createElement("span");
-      span.classList.add("status-pill");
-      const dot = document.createElement("span");
-      dot.className = "dot";
-
-      if (estado === "pendiente") {
-        span.classList.add("status-pendiente");
-      } else if (estado === "propuesta") {
-        span.classList.add("status-propuesta");
-      } else if (estado === "curso") {
-        span.classList.add("status-curso");
-      } else {
-        span.classList.add("status-pendiente");
-      }
-      span.appendChild(dot);
-      const text = document.createTextNode(estado || "pendiente");
-      span.appendChild(text);
-      return span;
-    }
-
-    function renderTabla() {
-      const estadoFilter = filtroEstado.value;
-      tablaSolicitudesBody.innerHTML = "";
-
-      const filtradas = solicitudesCache.filter(s => {
-        if (estadoFilter === "todos") return true;
-        return s.estado === estadoFilter;
-      });
-
-      filtradas.forEach(s => {
-        const tr = document.createElement("tr");
-        tr.dataset.id = s.id_solicitud;
-
-        const tdId = document.createElement("td");
-        tdId.textContent = s.id_solicitud || "-";
-        tr.appendChild(tdId);
-
-        const tdEmpresa = document.createElement("td");
-        tdEmpresa.textContent = s.empresa || "-";
-        tr.appendChild(tdEmpresa);
-
-        const tdEquipo = document.createElement("td");
-        tdEquipo.textContent = s.equipo || "-";
-        tr.appendChild(tdEquipo);
-
-        const tdPersonas = document.createElement("td");
-        tdPersonas.textContent = s.personas ?? "-";
-        tr.appendChild(tdPersonas);
-
-        const tdEstado = document.createElement("td");
-        tdEstado.appendChild(estadoBadge(s.estado));
-        tr.appendChild(tdEstado);
-
-        const tdPrecio = document.createElement("td");
-        tdPrecio.textContent = s.precio ? `USD ${s.precio}` : "-";
-        tr.appendChild(tdPrecio);
-
-        tr.addEventListener("click", () => {
-          mostrarDetalle(s);
-        });
-
-        tablaSolicitudesBody.appendChild(tr);
-      });
-
-      // KPIs
-      kpiTotal.textContent = solicitudesCache.length.toString();
-      kpiPropuesta.textContent = solicitudesCache.filter(s => s.estado === "propuesta").length.toString();
-      kpiCurso.textContent = solicitudesCache.filter(s => s.estado === "curso").length.toString();
-    }
-
-    function mostrarDetalle(s) {
-      placeholderAdmin.style.display = "none";
-      detalleAdmin.style.display = "block";
-      detalleAdmin.innerHTML = "";
-
-      const title = document.createElement("h3");
-      title.textContent = `Solicitud ${s.id_solicitud || ""} — ${s.empresa || ""}`;
-      detalleAdmin.appendChild(title);
-
-      const meta = document.createElement("p");
-      meta.className = "muted";
-      meta.innerHTML = `
-        Equipo: <b>${s.equipo || "-"}</b> · Personas: <b>${s.personas ?? "-"}</b> · Nivel: <b>${s.nivel || "-"}</b>
-      `;
-      detalleAdmin.appendChild(meta);
-
-      const rowStatus = document.createElement("div");
-      rowStatus.style.margin = "6px 0";
-      rowStatus.appendChild(estadoBadge(s.estado));
-      detalleAdmin.appendChild(rowStatus);
-
-      const resumen = document.createElement("p");
-      resumen.textContent = s.resumen || "Sin resumen registrado.";
-      detalleAdmin.appendChild(resumen);
-
-      if (s.habilidades_blandas?.length || s.habilidades_tecnicas?.length) {
-        const habTitle = document.createElement("h4");
-        habTitle.textContent = "Habilidades detectadas";
-        detalleAdmin.appendChild(habTitle);
-
-        const habContainer = document.createElement("div");
-        (s.habilidades_blandas || []).forEach(h => {
-          const span = document.createElement("span");
-          span.className = "badge";
-          span.textContent = h;
-          habContainer.appendChild(span);
-        });
-        (s.habilidades_tecnicas || []).forEach(h => {
-          const span = document.createElement("span");
-          span.className = "badge";
-          span.textContent = h;
-          habContainer.appendChild(span);
-        });
-        detalleAdmin.appendChild(habContainer);
-      }
-
-      if (s.syllabus?.length) {
-        const sylTitle = document.createElement("h4");
-        sylTitle.style.marginTop = "10px";
-        sylTitle.textContent = "Plan de estudios";
-        detalleAdmin.appendChild(sylTitle);
-
-        s.syllabus.forEach((mod, idx) => {
-          const modDiv = document.createElement("div");
-          modDiv.className = "module";
-
-          const title = document.createElement("div");
-          title.className = "module-title";
-          title.textContent = `Módulo ${idx + 1}: ${mod.modulo || "Sin título"}`;
-          modDiv.appendChild(title);
-
-          const meta = document.createElement("small");
-          if (mod.duracion) {
-            meta.textContent = `Duración estimada: ${mod.duracion} horas`;
-            modDiv.appendChild(meta);
-          }
-
-          if (mod.lecciones?.length) {
-            const ul = document.createElement("ul");
-            mod.lecciones.forEach(lec => {
-              const li = document.createElement("li");
-              li.textContent = lec;
-              ul.appendChild(li);
-            });
-            modDiv.appendChild(ul);
-          }
-          detalleAdmin.appendChild(modDiv);
-        });
-      }
-
-      const precio = document.createElement("div");
-      precio.className = "price";
-      precio.textContent = s.precio ? `Inversión estimada: USD ${s.precio}` : "Inversión estimada no disponible.";
-      detalleAdmin.appendChild(precio);
-
-      const accionesRow = document.createElement("div");
-      accionesRow.style.marginTop = "10px";
-      accionesRow.style.display = "flex";
-      accionesRow.style.gap = "8px";
-
-      const btnForzar = document.createElement("button");
-      btnForzar.className = "small";
-      btnForzar.textContent = "Forzar fabricación del curso";
-      btnForzar.addEventListener("click", () => {
-        forzarFabricacion(s.id_solicitud);
-      });
-      accionesRow.appendChild(btnForzar);
-
-      if (s.url_curso) {
-        const linkCurso = document.createElement("div");
-        linkCurso.style.marginTop = "6px";
-        linkCurso.innerHTML = `<span class="muted">Curso generado:</span> <span class="link" onclick="window.open('${s.url_curso}','_blank')">${s.url_curso}</span>`;
-        detalleAdmin.appendChild(linkCurso);
-      }
-
-      detalleAdmin.appendChild(accionesRow);
-    }
-
-    async function forzarFabricacion(id) {
-      if (!id) return;
-      const confirmacion = confirm(`¿Deseas forzar la fabricación del curso para la  solicitud ${id}?`);
-      if (!confirmacion) return;
-
-      try {
-        const resp = await fetch("https://ronaldordz17.app.n8n.cloud/webhook-test/analyze-prompt", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id_solicitud: id })
-        });
-        if (!resp.ok) throw new Error("Error al llamar a n8n para fabricación.");
-        alert("Se ha disparado la fabricación del curso (demo). Vuelve a actualizar el tablero para ver el nuevo estado.");
-      } catch (err) {
-        console.error(err);
-        alert("Ocurrió un error al forzar la fabricación.");
+        output.innerHTML = `
+          <b>Error al conectar con n8n:</b><br>
+          ${err.message}<br><br>
+          Revisa si el webhook está activo.
+        `;
       }
     }
-
-    btnActualizarAdmin.addEventListener("click", async () => {
-      errorAdmin.style.display = "none";
-      loaderAdmin.style.display = "flex";
-
-      try {
-        // Formato esperado desde n8n (ejemplo):
-        // [
-        //   {
-        //     id_solicitud: "ABC123",
-        //     empresa: "Finanzas Seguras",
-        //     equipo: "ventas",
-        //     personas: 12,
-        //     nivel: "intermedio",
-        //     estado: "propuesta" | "pendiente" | "curso",
-        //     precio: 120,
-        //     resumen: "...",
-        //     habilidades_blandas: [],
-        //     habilidades_tecnicas: [],
-        //     syllabus: [...],
-        //     url_curso: "https://..."
-        //   }
-        // ]
-        const resp = await fetch("https://TU_N8N_URL/webhook/listar-solicitudes", {
-          method: "GET"
-        });
-        if (!resp.ok) {
-          throw new Error("Error al obtener solicitudes desde n8n.");
-        }
-        const data = await resp.json();
-        solicitudesCache = Array.isArray(data) ? data : [];
-        renderTabla();
-      } catch (err) {
-        console.error(err);
-        errorAdmin.textContent = "Ocurrió un error obteniendo las solicitudes. Inténtalo nuevamente.";
-        errorAdmin.style.display = "block";
-      } finally {
-        loaderAdmin.style.display = "none";
-      }
-    });
-
-    filtroEstado.addEventListener("change", renderTabla);
   </script>
+
 </body>
 </html>
