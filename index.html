@@ -16,20 +16,17 @@
       align-items: center;
       padding: 40px 20px;
     }
-
     h1 {
       font-size: 2.4rem;
       margin-bottom: 10px;
       text-align: center;
     }
-
     p {
       color: #bbbbbb;
       text-align: center;
       max-width: 600px;
       margin-bottom: 30px;
     }
-
     .box {
       width: 100%;
       max-width: 700px;
@@ -39,7 +36,6 @@
       box-shadow: 0 0 25px rgba(0,0,0,0.3);
       animation: fadeIn 0.5s ease;
     }
-
     textarea {
       width: 100%;
       height: 160px;
@@ -51,11 +47,9 @@
       color: #fff;
       resize: none;
     }
-
     textarea:focus {
       outline: 2px solid #6e9dff;
     }
-
     button {
       margin-top: 20px;
       width: 100%;
@@ -68,11 +62,9 @@
       font-weight: bold;
       transition: 0.2s ease;
     }
-
     button:hover {
       background: #8bb2ff;
     }
-
     .result {
       margin-top: 35px;
       padding: 25px;
@@ -83,26 +75,9 @@
       display: none;
       white-space: pre-wrap;
     }
-
     .loading {
       animation: pulse 1.2s infinite;
       color: #8bb2ff;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 0.4; }
-      50% { opacity: 1; }
-      100% { opacity: 0.4; }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(25px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
@@ -110,10 +85,11 @@
 <body>
 
   <h1>Generador Inteligente de Propuestas</h1>
-  <p>Describe la necesidad del cliente y generaremos automáticamente una propuesta completa en minutos.</p>
+  <p>Describe la necesidad y generaremos automáticamente una propuesta completa en segundos.</p>
 
   <div class="box">
-    <textarea id="promptInput" placeholder="Ejemplo: Necesito capacitar a mi equipo de soporte técnico para mejorar comunicación empática y documentación en Zendesk..."></textarea>
+    <textarea id="promptInput"
+      placeholder="Ejemplo: Necesito capacitar a mi equipo de soporte técnico para mejorar comunicación empática y documentación en Zendesk..."></textarea>
     <button onclick="sendToN8N()">Generar Propuesta</button>
   </div>
 
@@ -134,33 +110,66 @@
       output.innerHTML = "<p class='loading'>⏳ Procesando tu propuesta en n8n...</p>";
 
       try {
-        const response = await fetch("https://ronaldorz7.app.n8n.cloud/webhook-test/course-prompt-analysis", {
+        const response = await fetch("https://ronaldorz7.app.n8n.cloud/webhook/course-prompt-analysis", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             prompt: text,
             timestamp: Date.now()
           })
         });
 
-        if (!response.ok) {
-          throw new Error("Error en webhook");
-        }
-
         const data = await response.json();
 
+        // Mostrar la propuesta al cliente
         output.innerHTML = `
           <h2>📄 Propuesta Generada</h2>
-          ${data.propuesta ? data.propuesta : JSON.stringify(data, null, 2)}
+          <pre>${JSON.stringify(data.syllabus, null, 2)}</pre>
+
+          <h3>💰 Precio Estimado: $${data.precio}</h3>
+
+          <button id="payButton">Aprobar y Pagar Ahora</button>
         `;
+
+        // Activar el botón de pago
+        document.getElementById("payButton").onclick = () => {
+          iniciarPago(data);
+        };
 
       } catch (err) {
         output.innerHTML = `
-          <b>Error al conectar con n8n:</b><br>
-          ${err.message}<br><br>
-          Revisa si el webhook está activo.
+          <b>Error al conectar con n8n:</b><br>${err.message}
+        `;
+      }
+    }
+
+    // ============================
+    // WORKFLOW 2 (Stripe Checkout)
+    // ============================
+    async function iniciarPago(data) {
+      const output = document.getElementById("output");
+
+      output.innerHTML += "<p class='loading'>🔄 Creando sesión de pago...</p>";
+
+      try {
+        const response = await fetch("https://ronaldorz7.app.n8n.cloud/webhook-test/stripe/payment-webhook", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            cursoId: data.cursoId,
+            precio: data.precio,
+            email: data.email || "cliente@empresa.com"
+          })
+        });
+
+        const payData = await response.json();
+
+        // Redirigir a Stripe Checkout
+        window.location.href = payData.checkout_url;
+
+      } catch (err) {
+        output.innerHTML += `
+          <br><b>Error al iniciar pago:</b> ${err.message}
         `;
       }
     }
